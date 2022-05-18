@@ -3,8 +3,11 @@ package com.example.ezcooking
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.material.R
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ezcooking.navigation.Navigation
 import com.example.ezcooking.ui.theme.EzCookingTheme
@@ -21,6 +24,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
+
 }
 
 @Preview(showBackground = true)
