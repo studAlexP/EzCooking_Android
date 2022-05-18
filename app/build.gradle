@@ -61,4 +61,9 @@ dependencies {
 
     //Navigation
     implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    //OKhttp
+    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
+
+
 }
