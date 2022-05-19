@@ -1,5 +1,8 @@
 package com.example.ezcooking.navigation
 
 enum class RecipeScreens {
-    HomeScreen
+    HomeScreen,
+    FavouriteScreen,
+    ListScreen,
+    SearchScreen
 }
