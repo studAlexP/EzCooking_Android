@@ -28,11 +28,7 @@ fun SearchScreen(navController: NavController = rememberNavController()) {
                 elevation = 3.dp,
 
                 ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
+                Row {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "up-button",
@@ -50,7 +46,11 @@ fun SearchScreen(navController: NavController = rememberNavController()) {
         },
         bottomBar = {
             BottomAppBar(backgroundColor = RasberryRed) {
-                Row {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.list),
                         contentDescription = "Recipes",
