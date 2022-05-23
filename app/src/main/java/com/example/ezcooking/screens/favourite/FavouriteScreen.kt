@@ -3,6 +3,8 @@ package com.example.ezcooking.screens.favourite
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,15 +14,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ezcooking.R
 import com.example.ezcooking.navigation.RecipeScreens
 import com.example.ezcooking.ui.theme.RasberryRed
 import com.example.ezcooking.ui.theme.YokeYellow
+import com.example.ezcooking.viewmodels.RecipeViewModel
+import com.example.ezcooking.widget.RecipeCards
 
 @Composable
-fun FavouriteScreen(navController: NavController = rememberNavController()){
+fun FavouriteScreen(
+    viewModel: RecipeViewModel = viewModel(),
+    navController: NavController = rememberNavController()
+){
 
     Scaffold(
         topBar = {
@@ -88,12 +96,20 @@ fun FavouriteScreen(navController: NavController = rememberNavController()){
         }
 
     ){
-        FavouriteScreenContent()
+        FavouriteScreenContent(viewModel = viewModel)
     }
 
 }
 
 @Composable
-fun FavouriteScreenContent(){
+fun FavouriteScreenContent(
+    viewModel: RecipeViewModel = viewModel()
+){
+    var favouriteRecipeList = viewModel.getAllRecipe()
+    LazyColumn {
+        items(favouriteRecipeList){ recipes ->
+            RecipeCards(recipe = recipes, viewFavIconState = true, State = viewModel.checkFavourite(recipes))
+        }
 
+    }
 }
