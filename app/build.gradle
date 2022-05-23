@@ -66,5 +66,8 @@ dependencies {
     //OKhttp
     implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
 
+    // Coil
+    implementation "io.coil-kt:coil-compose:$coil_version"
+
 
 }
