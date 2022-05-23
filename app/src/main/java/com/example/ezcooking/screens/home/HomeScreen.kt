@@ -3,6 +3,8 @@ package com.example.ezcooking.screens.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -17,16 +19,25 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.ezcooking.R
 import com.example.ezcooking.navigation.RecipeScreens
+import com.example.ezcooking.testRecipe.Recipe
+import com.example.ezcooking.testRecipe.getRecipes
 import com.example.ezcooking.ui.theme.AndroidGreen
 import com.example.ezcooking.ui.theme.MintGreen
 import com.example.ezcooking.ui.theme.EzCookingTheme
 import com.example.ezcooking.ui.theme.RasberryRed
+import com.example.ezcooking.viewmodels.RecipeViewModel
+import com.example.ezcooking.widget.RecipeCards
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    viewModel: RecipeViewModel = viewModel(),
+    navController: NavController = rememberNavController()
+) {
 
     var showMenu by remember {
         mutableStateOf(false)
@@ -35,7 +46,14 @@ fun HomeScreen(navController: NavController) {
     EzCookingTheme {
         Scaffold(
             topBar = {
-                TopAppBar(backgroundColor = MintGreen, title = {
+                TopAppBar(backgroundColor = Color.Black, title = {
+                    Image(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "Logo",
+                        modifier = Modifier.padding(5.dp),
+                        alignment = Alignment.BottomStart
+                    )
+
                     Text(
                         buildAnnotatedString {
                             withStyle(style = SpanStyle(color = AndroidGreen)) {
@@ -49,7 +67,11 @@ fun HomeScreen(navController: NavController) {
                 },
                     actions = {
                         IconButton(onClick = { showMenu = !showMenu }) {
-                            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "More",
+                                tint = Color.White
+                            )
                         }
 
                         DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
@@ -87,7 +109,7 @@ fun HomeScreen(navController: NavController) {
                             modifier = Modifier.padding(5.dp),
                             alignment = Alignment.BottomStart,
 
-                        )
+                            )
                         Image(
                             painter = painterResource(id = R.drawable.shopping_cart),
                             contentDescription = "Shopping Cart",
@@ -113,20 +135,29 @@ fun HomeScreen(navController: NavController) {
                 }
             }
         ) {
-            HomeScreenContent()
+            HomeScreenContent(viewModel = viewModel, navController = navController)
         }
     }
 }
 
 @Composable
-fun HomeScreenContent() {
-    Card(
-        modifier = Modifier
-            .padding(6.dp)
-            .fillMaxWidth()
-            .height(100.dp),
-        elevation = 6.dp
-    ) {
-        Text(text = "Future Recipes will show up here")
+fun HomeScreenContent(
+    viewModel: RecipeViewModel = viewModel(),
+    navController: NavController,
+    recipeList: List<Recipe> = getRecipes()
+) {
+
+    LazyColumn{
+        items(recipeList){ recipes ->
+            RecipeCards(recipe = recipes, viewFavIconState = true, State = viewModel.checkFavourite(recipes),
+                onFavouriteClick = {
+                    if (viewModel.checkFavourite(it)) {
+                        viewModel.removeRecipe(it)
+                    }else{
+                        viewModel.addRecipe(it)
+                    }
+                }
+            )
+        }
     }
 }
