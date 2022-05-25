@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,15 +26,14 @@ import com.example.ezcooking.navigation.RecipeScreens
 import com.example.ezcooking.testRecipe.Recipe
 import com.example.ezcooking.testRecipe.getRecipes
 import com.example.ezcooking.ui.theme.AndroidGreen
-import com.example.ezcooking.ui.theme.MintGreen
 import com.example.ezcooking.ui.theme.EzCookingTheme
 import com.example.ezcooking.ui.theme.RasberryRed
-import com.example.ezcooking.viewmodels.RecipeViewModel
+import com.example.ezcooking.viewmodels.FavouritesViewModel
 import com.example.ezcooking.widget.RecipeCards
 
 @Composable
 fun HomeScreen(
-    viewModel: RecipeViewModel = viewModel(),
+    viewModel: FavouritesViewModel = viewModel(),
     navController: NavController = rememberNavController()
 ) {
 
@@ -142,7 +140,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
-    viewModel: RecipeViewModel = viewModel(),
+    viewModel: FavouritesViewModel = viewModel(),
     navController: NavController,
     recipeList: List<Recipe> = getRecipes()
 ) {

@@ -11,12 +11,12 @@ import com.example.ezcooking.screens.favourite.FavouriteScreen
 import com.example.ezcooking.screens.home.HomeScreen
 import com.example.ezcooking.screens.list.ListScreen
 import com.example.ezcooking.screens.search.SearchScreen
-import com.example.ezcooking.viewmodels.RecipeViewModel
+import com.example.ezcooking.viewmodels.FavouritesViewModel
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    val recipeViewModel: RecipeViewModel = viewModel()
+    val favouritesViewModel: FavouritesViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -24,7 +24,7 @@ fun Navigation() {
     ) {
         composable(RecipeScreens.HomeScreen.name) {
             HomeScreen(
-                viewModel = recipeViewModel,
+                viewModel = favouritesViewModel,
                 navController = navController
             )
         }
@@ -32,7 +32,7 @@ fun Navigation() {
         composable(
             RecipeScreens.FavouriteScreen.name) {
             FavouriteScreen(
-                viewModel = recipeViewModel,
+                viewModel = favouritesViewModel,
                 navController = navController
             )
         }
@@ -40,7 +40,7 @@ fun Navigation() {
         composable(
             RecipeScreens.DetailScreen.name) {
             DetailScreen(
-                viewModel = recipeViewModel,
+                viewModel = favouritesViewModel,
                 navController = navController
             )
         }

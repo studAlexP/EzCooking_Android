@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.example.ezcooking.testRecipe.Recipe
 
-class RecipeViewModel : ViewModel() {
+class FavouritesViewModel : ViewModel() {
     private var recipes = mutableStateListOf<Recipe>()
 
     fun addRecipe(recipe: Recipe){

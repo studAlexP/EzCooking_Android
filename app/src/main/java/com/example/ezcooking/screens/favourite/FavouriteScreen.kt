@@ -21,12 +21,12 @@ import com.example.ezcooking.R
 import com.example.ezcooking.navigation.RecipeScreens
 import com.example.ezcooking.ui.theme.RasberryRed
 import com.example.ezcooking.ui.theme.YokeYellow
-import com.example.ezcooking.viewmodels.RecipeViewModel
+import com.example.ezcooking.viewmodels.FavouritesViewModel
 import com.example.ezcooking.widget.RecipeCards
 
 @Composable
 fun FavouriteScreen(
-    viewModel: RecipeViewModel = viewModel(),
+    viewModel: FavouritesViewModel = viewModel(),
     navController: NavController = rememberNavController()
 ){
 
@@ -103,7 +103,7 @@ fun FavouriteScreen(
 
 @Composable
 fun FavouriteScreenContent(
-    viewModel: RecipeViewModel = viewModel()
+    viewModel: FavouritesViewModel = viewModel()
 ){
     var favouriteRecipeList = viewModel.getAllRecipe()
     LazyColumn {

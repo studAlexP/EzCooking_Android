@@ -19,12 +19,13 @@ import com.example.ezcooking.R
 import com.example.ezcooking.navigation.RecipeScreens
 import com.example.ezcooking.ui.theme.CartPink
 import com.example.ezcooking.ui.theme.RasberryRed
-import com.example.ezcooking.viewmodels.RecipeViewModel
+import com.example.ezcooking.viewmodels.FavouritesViewModel
 
 @Composable
 fun DetailScreen(
-    viewModel: RecipeViewModel = viewModel(),
-    navController: NavController = rememberNavController()
+    viewModel: FavouritesViewModel = viewModel(),
+    navController: NavController = rememberNavController(),
+    recipeId: String? = "ChickenAvocado"
 ){
     Scaffold(
         topBar = {
