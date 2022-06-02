@@ -2,9 +2,11 @@ package com.example.ezcooking.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.ezcooking.screens.detail.DetailScreen
 import com.example.ezcooking.screens.favourite.FavouriteScreen
 
@@ -38,10 +40,16 @@ fun Navigation() {
         }
 
         composable(
-            RecipeScreens.DetailScreen.name) {
+            RecipeScreens.DetailScreen.name + "/{recipe}",
+            arguments = listOf(navArgument("recipe") {
+            type = NavType.StringType
+            })
+        ){
+            backStackEntry ->
             DetailScreen(
                 viewModel = favouritesViewModel,
-                navController = navController
+                navController = navController,
+                backStackEntry.arguments?.getString("recipe")
             )
         }
 
