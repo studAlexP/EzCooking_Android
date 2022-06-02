@@ -16,21 +16,22 @@ fun getRecipes(): List<Recipe> {
             title = "Chicken breast with avocado salad",
             categorie = "Salad",
             images = listOf("https://images.immediate.co.uk/production/volatile/sites/30/2020/08/recipe-image-legacy-id-654469_11-0a00ead.jpg?quality=90&webp=true&resize=300,272"),
-            ingredients = "    1 skinless chicken breast\n" +
+            ingredients = "\n    1 skinless chicken breast\n" +
                     "    2 tsp olive oil (1 for the salad)\n" +
                     "    1 heaped tsp smoked paprika\n" +
                     "\n" +
-                    "For the salad\n" +
+                    "For the salad:" +
                     "\n" +
                     "    ½ small avocado , diced\n" +
                     "    1 tsp red wine vinegar\n" +
                     "    1 tbsp flat-leaf parsley , roughly chopped\n" +
                     "    1 medium tomato , chopped\n" +
                     "    half small red onion , thinly sliced",
-            steps = "STEP 1\n" +
+            steps = "\n" +"\nSTEP 1" +
                     "\n" +
                     "Heat grill to medium. Rub the chicken all over with 1 tsp of the olive oil and the paprika. Cook for 4-5 mins each side until lightly charred and cooked through.\n" +
-                    "STEP 2\n" +
+                    "\n" +
+                    "STEP 2" +
                     "\n" +
                     "Mix the salad ingredients together, season and add the rest of the oil. thickly slice the chicken and serve with salad."
         ),
@@ -40,7 +41,7 @@ fun getRecipes(): List<Recipe> {
             title = "Tofu stir-fry",
             categorie = "Vegetarian",
             images = listOf("https://images.immediate.co.uk/production/volatile/sites/30/2022/01/Tofu-stir-fry-16f5101.jpg?quality=90&webp=true&resize=300,272"),
-            ingredients = "    3 tbsp low-sodium soy sauce\n" +
+            ingredients = "   3 tbsp low-sodium soy sauce\n" +
                     "    1½ tbsp honey\n" +
                     "    1 tbsp white wine vinegar\n" +
                     "    300g tofu, cut into chunks\n" +
