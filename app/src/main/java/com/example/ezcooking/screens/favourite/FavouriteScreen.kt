@@ -96,20 +96,31 @@ fun FavouriteScreen(
         }
 
     ){
-        FavouriteScreenContent(viewModel = viewModel)
+        FavouriteScreenContent(viewModel = viewModel, navController = navController)
     }
 
 }
 
 @Composable
 fun FavouriteScreenContent(
-    viewModel: FavouritesViewModel = viewModel()
+    viewModel: FavouritesViewModel = viewModel(),
+    navController: NavController
 ){
     var favouriteRecipeList = viewModel.getAllRecipe()
+
     LazyColumn {
         items(favouriteRecipeList){ recipes ->
-            RecipeCards(recipe = recipes, viewFavIconState = true, State = viewModel.checkFavourite(recipes))
+            RecipeCards(
+                recipe = recipes,
+                viewFavIconState = true,
+                State = viewModel.checkFavourite(recipes),
+                onItemClick = { recipeId ->
+                    navController.navigate(route = RecipeScreens.DetailScreen.name + "/$recipeId")
+
+                }
+            )
         }
+
 
     }
 }
