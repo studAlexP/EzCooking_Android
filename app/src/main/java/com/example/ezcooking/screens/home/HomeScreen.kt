@@ -77,11 +77,11 @@ fun HomeScreen(
                                 Row {
                                     Icon(
                                         imageVector = Icons.Default.Favorite,
-                                        contentDescription = "Favourites",
+                                        contentDescription = "Favourite",
                                         modifier = Modifier.padding(4.dp)
                                     )
                                     Text(
-                                        text = "Favourites",
+                                        text = "Favourite",
                                         modifier = Modifier
                                             .padding(4.dp)
                                             .width(100.dp)
@@ -145,15 +145,22 @@ fun HomeScreenContent(
     recipeList: List<Recipe> = getRecipes()
 ) {
 
-    LazyColumn{
-        items(recipeList){ recipes ->
-            RecipeCards(recipe = recipes, viewFavIconState = true, State = viewModel.checkFavourite(recipes),
+    LazyColumn {
+        items(recipeList) { recipes ->
+            RecipeCards(
+                recipe = recipes,
+                viewFavIconState = true,
+                State = viewModel.checkFavourite(recipes),
                 onFavouriteClick = {
                     if (viewModel.checkFavourite(it)) {
                         viewModel.removeRecipe(it)
-                    }else{
+                    } else {
                         viewModel.addRecipe(it)
                     }
+                },
+                onItemClick = { recipeId ->
+                    navController.navigate(route = RecipeScreens.DetailScreen.name + "/$recipeId")
+
                 }
             )
         }
