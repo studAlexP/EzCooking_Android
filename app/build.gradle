@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -63,14 +64,17 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
-    // Okhttp
-    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
-
-    //Gson
-    implementation "com.google.code.gson:gson:$gson_version"
-
     // Coil
     implementation "io.coil-kt:coil-compose:$coil_version"
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+
+    // Ktor client
+    implementation "io.ktor:ktor-client-okhttp:$ktor_version"
+    implementation "io.ktor:ktor-client-json:$ktor_version"
+    implementation "io.ktor:ktor-client-serialization-jvm:$ktor_version"
+    implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
 
 
 }
