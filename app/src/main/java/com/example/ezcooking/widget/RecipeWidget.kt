@@ -19,9 +19,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.ezcooking.models.Meal
 import com.example.ezcooking.testRecipe.Recipe
 import com.example.ezcooking.testRecipe.getRecipes
+import com.example.ezcooking.viewmodels.RecipeViewModel
 
 @Composable
 fun RecipeCards(
@@ -160,4 +163,17 @@ fun RecipeDetails(recipe: Recipe = getRecipes()[0]){
         )
 
     }
+}
+
+@Composable
+fun GetRecipes() : List<Meal> {
+    val viewModel: RecipeViewModel = viewModel()
+    val data = viewModel.recipes.collectAsState()
+    var recipes = listOf<Meal>()
+
+    data.value?.let {
+        recipes = it.meals
+    }
+
+    return recipes
 }
