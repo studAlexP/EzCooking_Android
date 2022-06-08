@@ -29,18 +29,18 @@ import com.example.ezcooking.viewmodels.RecipeViewModel
 
 @Composable
 fun RecipeCards(
-    recipe: Recipe = getRecipes()[0],
+    meal: Meal = GetRecipes("Chicken")[0],
     viewFavIconState: Boolean,
     State: Boolean,
     onItemClick: (String) -> Unit = {},
-    onFavouriteClick: (Recipe) -> Unit = {}
+    onFavouriteClick: (Meal) -> Unit = {}
 ) {
     Card(
         modifier = Modifier
             .padding(6.dp)
             .fillMaxWidth()
             .clickable {
-                onItemClick(recipe.id)
+                onItemClick(meal.idMeal)
             }
             .animateContentSize(
                 animationSpec = tween(
@@ -53,7 +53,7 @@ fun RecipeCards(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Surface(modifier = Modifier.size(100.dp)) {
                 AsyncImage(
-                    model = recipe.images[0],
+                    model = meal.strMealThumb,
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
@@ -66,17 +66,17 @@ fun RecipeCards(
 
             ) {
                 FavouriteIcon(
-                    recipe,
+                    meal,
                     viewFavouriteIcon = viewFavIconState,
                     State = State
-                ) { recipe ->
-                    onFavouriteClick(recipe)
+                ) { meal ->
+                    onFavouriteClick(meal)
                 }
 
                 Text(
-                    text = recipe.title,
+                    text = meal.strMeal,
                     fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.h5
+                    style = MaterialTheme.typography.h6
                 )
 
                 Divider(
@@ -84,10 +84,10 @@ fun RecipeCards(
                     thickness = 1.dp
                 )
 
-                Text(
+                /*Text(
                     text = "Categorie: ${recipe.categorie}",
                     style = MaterialTheme.typography.caption
-                )
+                )*/
 
 
             }
@@ -98,10 +98,10 @@ fun RecipeCards(
 
 @Composable
 fun FavouriteIcon(
-    recipe: Recipe,
+    meal: Meal,
     viewFavouriteIcon: Boolean,
     State: Boolean,
-    onFavouriteClick: (Recipe) -> Unit = {}
+    onFavouriteClick: (Meal) -> Unit = {}
 ) {
     var favouriteChecked by remember { mutableStateOf(State) }
 
@@ -119,7 +119,7 @@ fun FavouriteIcon(
                     modifier = Modifier
                         .clickable(onClick = {
                             favouriteChecked = !favouriteChecked
-                            onFavouriteClick(recipe)
+                            onFavouriteClick(meal)
                         })
                 )
             }
@@ -135,7 +135,7 @@ fun FavouriteIcon(
                     modifier = Modifier
                         .clickable(onClick = {
                             favouriteChecked = !favouriteChecked
-                            onFavouriteClick(recipe)
+                            onFavouriteClick(meal)
                         })
                 )
             }
@@ -143,13 +143,13 @@ fun FavouriteIcon(
 
     }
 }
-
+/*
 @Composable
-fun RecipeDetails(recipe: Recipe = getRecipes()[0]) {
+fun RecipeDetails(meal: Meal = GetRecipes()[0]){
     val scrollState = rememberScrollState()
     Column(modifier = Modifier.verticalScroll(scrollState)) {
         Text(
-            text = "Ingredients: ${recipe.ingredients}",
+            text = "Ingredients: ${meal.ingredients}",
             fontSize = MaterialTheme.typography.body1.fontSize,
             overflow = TextOverflow.Ellipsis
         )
@@ -158,26 +158,27 @@ fun RecipeDetails(recipe: Recipe = getRecipes()[0]) {
             thickness = 1.dp
         )
         Text(
-            text = "Steps: ${recipe.steps}",
+            text = "Steps: ${meal.steps}",
             fontSize = MaterialTheme.typography.body1.fontSize,
             overflow = TextOverflow.Ellipsis
         )
 
     }
 }
+*/
 
 @Composable
 fun GetRecipes(ingredient: String): List<Meal> {
     RecipeViewModel.ingredient = ingredient
     val viewModel: RecipeViewModel = viewModel()
     val data = viewModel.recipes.collectAsState()
-    var recipes = listOf<Meal>()
+    var meals = listOf<Meal>()
 
     data.value?.let {
-        recipes = it.meals
+        meals = it.meals
     }
 
-    return recipes
+    return meals
 }
 
 @Composable
@@ -185,11 +186,11 @@ fun GetRecipesById(id: String): MealX? {
     RecipeDetailViewModel.id = id
     val viewModel: RecipeDetailViewModel = viewModel()
     val data = viewModel.detail.collectAsState()
-    var recipe: MealX? = null
+    var meal: MealX? = null
 
     data.value?.let {
-        recipe = it.meals[0]
+        meal = it.meals[0]
     }
 
-    return recipe
+    return meal
 }
