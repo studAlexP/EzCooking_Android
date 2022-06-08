@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ezcooking.R
+import com.example.ezcooking.models.Meal
 import com.example.ezcooking.navigation.RecipeScreens
 import com.example.ezcooking.testRecipe.Recipe
 import com.example.ezcooking.testRecipe.getRecipes
@@ -29,6 +30,7 @@ import com.example.ezcooking.ui.theme.AndroidGreen
 import com.example.ezcooking.ui.theme.EzCookingTheme
 import com.example.ezcooking.ui.theme.RasberryRed
 import com.example.ezcooking.viewmodels.FavouritesViewModel
+import com.example.ezcooking.widget.GetRecipes
 import com.example.ezcooking.widget.RecipeCards
 
 @Composable
@@ -142,15 +144,15 @@ fun HomeScreen(
 fun HomeScreenContent(
     viewModel: FavouritesViewModel = viewModel(),
     navController: NavController,
-    recipeList: List<Recipe> = getRecipes()
+    mealList: List<Meal> = GetRecipes("Chicken")
 ) {
 
     LazyColumn {
-        items(recipeList) { recipes ->
+        items(mealList) { meals ->
             RecipeCards(
-                recipe = recipes,
+                meal = meals,
                 viewFavIconState = true,
-                State = viewModel.checkFavourite(recipes),
+                State = viewModel.checkFavourite(meals),
                 onFavouriteClick = {
                     if (viewModel.checkFavourite(it)) {
                         viewModel.removeRecipe(it)
