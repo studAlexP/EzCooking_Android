@@ -2,23 +2,23 @@ package com.example.ezcooking.viewmodels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.example.ezcooking.testRecipe.Recipe
+import com.example.ezcooking.models.Meal
 
 class FavouritesViewModel : ViewModel() {
-    private var recipes = mutableStateListOf<Recipe>()
+    private var meals = mutableStateListOf<Meal>()
 
-    fun addRecipe(recipe: Recipe){
-        recipes.add(recipe)
+    fun addRecipe(meal: Meal){
+        meals.add(meal)
     }
 
-    fun removeRecipe(recipe: Recipe){
-        recipes.remove(recipe)
+    fun removeRecipe(meal: Meal){
+        meals.remove(meal)
     }
 
-    fun getAllRecipe(): List<Recipe>{
-        return recipes
+    fun getAllRecipe(): List<Meal>{
+        return meals
     }
-    fun checkFavourite(recipe: Recipe): Boolean{
-        return recipes.contains(recipe)
+    fun checkFavourite(meal: Meal): Boolean{
+        return meals.contains(meal)
     }
 }
