@@ -109,18 +109,17 @@ fun FavouriteScreenContent(
     var favouriteRecipeList = viewModel.getAllRecipe()
 
     LazyColumn {
-        items(favouriteRecipeList){ recipes ->
+        items(favouriteRecipeList){ meals ->
             RecipeCards(
-                recipe = recipes,
+                meal = meals,
                 viewFavIconState = true,
-                State = viewModel.checkFavourite(recipes),
+                State = viewModel.checkFavourite(meals),
                 onItemClick = { recipeId ->
                     navController.navigate(route = RecipeScreens.DetailScreen.name + "/$recipeId")
 
                 }
             )
         }
-
 
     }
 }
