@@ -21,9 +21,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.ezcooking.models.Meal
+import com.example.ezcooking.models.Meal import com.example.ezcooking.models.MealX
 import com.example.ezcooking.testRecipe.Recipe
 import com.example.ezcooking.testRecipe.getRecipes
+import com.example.ezcooking.viewmodels.RecipeDetailViewModel
 import com.example.ezcooking.viewmodels.RecipeViewModel
 
 @Composable
@@ -144,9 +145,9 @@ fun FavouriteIcon(
 }
 
 @Composable
-fun RecipeDetails(recipe: Recipe = getRecipes()[0]){
+fun RecipeDetails(recipe: Recipe = getRecipes()[0]) {
     val scrollState = rememberScrollState()
-    Column(modifier = Modifier.verticalScroll(scrollState)){
+    Column(modifier = Modifier.verticalScroll(scrollState)) {
         Text(
             text = "Ingredients: ${recipe.ingredients}",
             fontSize = MaterialTheme.typography.body1.fontSize,
@@ -166,7 +167,8 @@ fun RecipeDetails(recipe: Recipe = getRecipes()[0]){
 }
 
 @Composable
-fun GetRecipes() : List<Meal> {
+fun GetRecipes(ingredient: String): List<Meal> {
+    RecipeViewModel.ingredient = ingredient
     val viewModel: RecipeViewModel = viewModel()
     val data = viewModel.recipes.collectAsState()
     var recipes = listOf<Meal>()
@@ -176,4 +178,18 @@ fun GetRecipes() : List<Meal> {
     }
 
     return recipes
+}
+
+@Composable
+fun GetRecipesById(id: String): MealX? {
+    RecipeDetailViewModel.id = id
+    val viewModel: RecipeDetailViewModel = viewModel()
+    val data = viewModel.detail.collectAsState()
+    var recipe: MealX? = null
+
+    data.value?.let {
+        recipe = it.meals[0]
+    }
+
+    return recipe
 }
