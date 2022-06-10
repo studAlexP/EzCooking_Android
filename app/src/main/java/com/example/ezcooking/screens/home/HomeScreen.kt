@@ -164,13 +164,19 @@ private fun CustomCircularProgressBar(
         dataLoaded = true
     }
 
-    Box {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
         if (!dataLoaded) {
             CircularProgressIndicator(
-                modifier = Modifier.size(100.dp),
-                color = Color.Green,
-                strokeWidth = 10.dp
-            )
+                modifier = Modifier
+                    .size(100.dp)
+                    .align(Alignment.Center),
+                color = AndroidGreen,
+                strokeWidth = 10.dp,
+
+                )
         }
         if (dataLoaded) {
             RecipeViewModel.ingredient = keywords.joinToString(",")
