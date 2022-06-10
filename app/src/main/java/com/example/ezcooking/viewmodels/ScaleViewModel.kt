@@ -7,7 +7,8 @@ import com.example.ezcooking.repository.ScaleRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class ScaleViewModel: ViewModel() {
+class ScaleViewModel : ViewModel() {
+
     val keywords = MutableStateFlow<Keyword?>(null)
 
     init {

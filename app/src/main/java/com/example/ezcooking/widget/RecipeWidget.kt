@@ -5,8 +5,6 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -17,19 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.ezcooking.models.Meal import com.example.ezcooking.models.MealX
-import com.example.ezcooking.testRecipe.Recipe
-import com.example.ezcooking.testRecipe.getRecipes
-import com.example.ezcooking.viewmodels.RecipeDetailViewModel
-import com.example.ezcooking.viewmodels.RecipeViewModel
+import com.example.ezcooking.models.Meal
 
 @Composable
 fun RecipeCards(
-    meal: Meal = GetRecipes("Chicken")[0],
+    meal: Meal,
     viewFavIconState: Boolean,
     State: Boolean,
     onItemClick: (String) -> Unit = {},
@@ -140,57 +132,5 @@ fun FavouriteIcon(
                 )
             }
         }
-
     }
-}
-/*
-@Composable
-fun RecipeDetails(meal: Meal = GetRecipes()[0]){
-    val scrollState = rememberScrollState()
-    Column(modifier = Modifier.verticalScroll(scrollState)) {
-        Text(
-            text = "Ingredients: ${meal.ingredients}",
-            fontSize = MaterialTheme.typography.body1.fontSize,
-            overflow = TextOverflow.Ellipsis
-        )
-        Divider(
-            color = Color.Black,
-            thickness = 1.dp
-        )
-        Text(
-            text = "Steps: ${meal.steps}",
-            fontSize = MaterialTheme.typography.body1.fontSize,
-            overflow = TextOverflow.Ellipsis
-        )
-
-    }
-}
-*/
-
-@Composable
-fun GetRecipes(ingredient: String): List<Meal> {
-    RecipeViewModel.ingredient = ingredient
-    val viewModel: RecipeViewModel = viewModel()
-    val data = viewModel.recipes.collectAsState()
-    var meals = listOf<Meal>()
-
-    data.value?.let {
-        meals = it.meals
-    }
-
-    return meals
-}
-
-@Composable
-fun GetRecipesById(id: String): MealX? {
-    RecipeDetailViewModel.id = id
-    val viewModel: RecipeDetailViewModel = viewModel()
-    val data = viewModel.detail.collectAsState()
-    var meal: MealX? = null
-
-    data.value?.let {
-        meal = it.meals[0]
-    }
-
-    return meal
 }

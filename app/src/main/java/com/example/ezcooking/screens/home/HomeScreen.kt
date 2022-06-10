@@ -24,14 +24,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ezcooking.R
 import com.example.ezcooking.models.Meal
 import com.example.ezcooking.navigation.RecipeScreens
-import com.example.ezcooking.testRecipe.Recipe
-import com.example.ezcooking.testRecipe.getRecipes
 import com.example.ezcooking.ui.theme.AndroidGreen
 import com.example.ezcooking.ui.theme.EzCookingTheme
 import com.example.ezcooking.ui.theme.RasberryRed
 import com.example.ezcooking.viewmodels.FavouritesViewModel
-import com.example.ezcooking.widget.GetRecipes
+import com.example.ezcooking.viewmodels.RecipeViewModel
+import com.example.ezcooking.viewmodels.ScaleViewModel
 import com.example.ezcooking.widget.RecipeCards
+import kotlinx.coroutines.*
 
 @Composable
 fun HomeScreen(
@@ -135,7 +135,55 @@ fun HomeScreen(
                 }
             }
         ) {
-            HomeScreenContent(viewModel = viewModel, navController = navController)
+            CustomCircularProgressBar(viewModel, navController)
+        }
+    }
+}
+
+
+@Composable
+private fun CustomCircularProgressBar(
+    viewModel: FavouritesViewModel = viewModel(),
+    navController: NavController
+) {
+    var dataLoaded by remember { mutableStateOf(false) }
+
+    val keywordsViewModel: ScaleViewModel = viewModel()
+    val keywordsData = keywordsViewModel.keywords.collectAsState()
+    var keywords: List<String> = emptyList()
+
+    var meals: List<Meal> = emptyList()
+
+    keywordsData.value?.let {
+        keywords = it.keywords
+    }
+
+
+    LaunchedEffect(Unit) {
+        delay(2000)
+        dataLoaded = true
+    }
+
+    Box {
+        if (!dataLoaded) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(100.dp),
+                color = Color.Green,
+                strokeWidth = 10.dp
+            )
+        }
+        if (dataLoaded) {
+            RecipeViewModel.ingredient = keywords.joinToString(",")
+            val viewModel2: RecipeViewModel = viewModel()
+            val data = viewModel2.recipes.collectAsState()
+            data.value?.let {
+                meals = it.meals
+            }
+            HomeScreenContent(
+                viewModel = viewModel,
+                navController = navController,
+                mealList = meals
+            )
         }
     }
 }
@@ -144,9 +192,8 @@ fun HomeScreen(
 fun HomeScreenContent(
     viewModel: FavouritesViewModel = viewModel(),
     navController: NavController,
-    mealList: List<Meal> = GetRecipes("Chicken")
+    mealList: List<Meal>
 ) {
-
     LazyColumn {
         items(mealList) { meals ->
             RecipeCards(
