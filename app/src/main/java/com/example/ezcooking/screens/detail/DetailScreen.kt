@@ -1,35 +1,46 @@
 package com.example.ezcooking.screens.detail
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.ezcooking.R
+import com.example.ezcooking.models.MealX
 import com.example.ezcooking.navigation.RecipeScreens
-import com.example.ezcooking.testRecipe.Recipe
-import com.example.ezcooking.testRecipe.getRecipes
+import com.example.ezcooking.ui.theme.AndroidGreen
 import com.example.ezcooking.ui.theme.CartPink
 import com.example.ezcooking.ui.theme.RasberryRed
 import com.example.ezcooking.viewmodels.FavouritesViewModel
-import com.example.ezcooking.widget.RecipeCards
-import com.example.ezcooking.widget.RecipeDetails
+import com.example.ezcooking.viewmodels.RecipeDetailViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
 fun DetailScreen(
     viewModel: FavouritesViewModel = viewModel(),
     navController: NavController = rememberNavController(),
-    recipeId: String? = "ChickenAvocado"
+    recipeId: String?
 ) {
     val recipe = filterRecipe(recipeId = recipeId)
 
@@ -52,7 +63,7 @@ fun DetailScreen(
                             .width(20.dp)
                     )
 
-                    Text(text = recipe.title)
+                    Text(text = "Recipe", fontSize = 20.sp)
                 }
             }
         },
@@ -99,42 +110,383 @@ fun DetailScreen(
         }
 
     ) {
-        DetailScreenContent(viewModel = viewModel, recipe = recipe)
+        CustomCircularProgressBar(viewModel = viewModel, recipeId = recipeId)
     }
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreenContent(
     viewModel: FavouritesViewModel = viewModel(),
-    recipe: Recipe
+    recipe: MealX?
 ) {
+
+    var scrollState = rememberScrollState()
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        Column {
-            RecipeCards(
-                recipe = recipe,
-                viewFavIconState = true,
-                State = viewModel.checkFavourite(recipe),
-                onFavouriteClick = {
-                    if (viewModel.checkFavourite(it)) {
-                        viewModel.removeRecipe(it)
-                    } else {
-                        viewModel.addRecipe(it)
+        Column(
+            modifier = Modifier.verticalScroll(state = scrollState)
+        ) {
+            if (recipe != null) {
+                Text(
+                    text = recipe.strMeal,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier
+                        .padding(0.dp, 10.dp, 0.dp, 20.dp)
+                        .align(CenterHorizontally)
+                )
+
+                AsyncImage(
+                    model = recipe.strMealThumb,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(CenterHorizontally)
+                        .padding(0.dp, 0.dp, 0.dp, 20.dp)
+                        .clip(CircleShape)
+                )
+
+                Row {
+
+                    val context = LocalContext.current
+                    val webIntent: Intent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.strYoutube))
+
+                    Image(
+                        painter = painterResource(id = R.drawable.youtube),
+                        contentDescription = "Recipes",
+                        modifier = Modifier
+                            .padding(330.dp, 0.dp, 0.dp, 0.dp)
+                            .clickable(
+                                onClick = { context.startActivity(webIntent) }
+                            )
+                    )
+                }
+
+                Text(
+                    text = "Details:",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h5
+                )
+
+                Text(
+                    text = "Catogorie: ${recipe.strCategory}",
+                    style = MaterialTheme.typography.body1
+                )
+
+                Divider()
+
+                Text(
+                    text = "Ingredients:",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h5
+                )
+
+/*
+                for (i in 1 .. 20) {
+                    Text(
+                        text = recipe.strIngredient ,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.h6
+
+                    )
+                }
+ */
+
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure1,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient1,
+                            fontSize = 16.sp
+                        )
                     }
                 }
-            )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure2,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient2,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure3,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient3,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure4,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient4,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure5,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient5,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure6,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient6,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure7,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient7,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure8,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient8,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure9,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient9,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure10,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient10,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure11,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient11,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure12,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient12,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure13,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient13,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure14,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient14,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                Row{
+                    Column(modifier = Modifier.width(150.dp)) {
+                        Text(
+                            text = recipe.strMeasure15,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.Start).padding(10.dp,0.dp,0.dp,0.dp)
+                        )
+                    }
+                    Column(modifier=Modifier.padding(20.dp,0.dp,0.dp,0.dp)) {
+                        Text(
+                            text = recipe.strIngredient15,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
 
-            RecipeDetails()
+
+                Divider()
+
+                Text(
+                    text = "Instructions:",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h5
+                )
+
+                Text(
+                    text = recipe.strInstructions
+                )
+            }
         }
     }
 }
 
-fun filterRecipe(recipeId: String?): Recipe {
-    return getRecipes().filter { recipe -> recipe.id == recipeId }[0]
+@SuppressLint("StateFlowValueCalledInComposition")
+@Composable
+private fun CustomCircularProgressBar(
+    viewModel: FavouritesViewModel = viewModel(),
+    recipeId: String?
+) {
+    var dataLoaded by remember { mutableStateOf(false) }
+
+    /*var test by remember {
+        if (true) println("test")
+    }*/
+
+    if (recipeId != null) {
+        RecipeDetailViewModel.id = recipeId
+    }
+
+    val recipeViewModel: RecipeDetailViewModel = viewModel()
+    val recipeData = recipeViewModel.detail.collectAsState()
+    var recipe: MealX? = null
+
+    recipeData.value?.let {
+        Log.d("TEST12", it.meals.toString())
+        recipe = it.meals[0]
+    }
+
+    LaunchedEffect(Unit) {
+        delay(2000)
+        dataLoaded = true
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        if (!dataLoaded) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(100.dp)
+                    .align(Alignment.Center),
+                color = AndroidGreen,
+                strokeWidth = 10.dp,
+            )
+        }
+        if (dataLoaded) {
+            DetailScreenContent(viewModel = viewModel, recipe = recipe)
+        }
+    }
 }
