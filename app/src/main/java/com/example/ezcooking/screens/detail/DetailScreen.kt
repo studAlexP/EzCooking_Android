@@ -31,19 +31,15 @@ import com.example.ezcooking.navigation.RecipeScreens
 import com.example.ezcooking.ui.theme.AndroidGreen
 import com.example.ezcooking.ui.theme.CartPink
 import com.example.ezcooking.ui.theme.RasberryRed
-import com.example.ezcooking.viewmodels.FavouritesViewModel
 import com.example.ezcooking.viewmodels.RecipeDetailViewModel
 import kotlinx.coroutines.delay
 
 
 @Composable
 fun DetailScreen(
-    viewModel: FavouritesViewModel = viewModel(),
     navController: NavController = rememberNavController(),
     recipeId: String?
 ) {
-    val recipe = filterRecipe(recipeId = recipeId)
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -110,15 +106,13 @@ fun DetailScreen(
         }
 
     ) {
-        CustomCircularProgressBar(viewModel = viewModel, recipeId = recipeId)
+        CustomCircularProgressBar(recipeId = recipeId)
     }
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreenContent(
-    viewModel: FavouritesViewModel = viewModel(),
     recipe: MealX?
 ) {
 
@@ -442,17 +436,11 @@ fun DetailScreenContent(
     }
 }
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 private fun CustomCircularProgressBar(
-    viewModel: FavouritesViewModel = viewModel(),
     recipeId: String?
 ) {
     var dataLoaded by remember { mutableStateOf(false) }
-
-    /*var test by remember {
-        if (true) println("test")
-    }*/
 
     if (recipeId != null) {
         RecipeDetailViewModel.id = recipeId
@@ -468,6 +456,7 @@ private fun CustomCircularProgressBar(
     }
 
     LaunchedEffect(Unit) {
+        recipeViewModel.getRecipeDetails()
         delay(2000)
         dataLoaded = true
     }
@@ -485,8 +474,14 @@ private fun CustomCircularProgressBar(
                 strokeWidth = 10.dp,
             )
         }
-        if (dataLoaded) {
-            DetailScreenContent(viewModel = viewModel, recipe = recipe)
-        }
+    }
+
+    recipeData.value?.let {
+        recipe = it.meals[0]
+    }
+
+
+    if (dataLoaded) {
+        DetailScreenContent(recipe = recipe)
     }
 }

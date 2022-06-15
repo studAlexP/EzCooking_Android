@@ -154,14 +154,16 @@ private fun CustomCircularProgressBar(
 
     var meals: List<Meal> = emptyList()
 
-    keywordsData.value?.let {
-        keywords = it.keywords
-    }
 
 
     LaunchedEffect(Unit) {
+        keywordsViewModel.getKeywords()
         delay(2000)
         dataLoaded = true
+    }
+
+    keywordsData.value?.let {
+        keywords = it.keywords
     }
 
     Box(
@@ -180,9 +182,10 @@ private fun CustomCircularProgressBar(
         }
         if (dataLoaded) {
             RecipeViewModel.ingredient = keywords.joinToString(",")
-            val viewModel2: RecipeViewModel = viewModel()
-            val data = viewModel2.recipes.collectAsState()
-            data.value?.let {
+            val recipeViewModel: RecipeViewModel = viewModel()
+            recipeViewModel.getRecipes()
+            val recipeData = recipeViewModel.recipes.collectAsState()
+            recipeData.value?.let {
                 meals = it.meals
             }
             HomeScreenContent(

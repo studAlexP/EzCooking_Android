@@ -47,7 +47,6 @@ fun Navigation() {
         ){
             backStackEntry ->
             DetailScreen(
-                viewModel = favouritesViewModel,
                 navController = navController,
                 backStackEntry.arguments?.getString("recipe")
             )

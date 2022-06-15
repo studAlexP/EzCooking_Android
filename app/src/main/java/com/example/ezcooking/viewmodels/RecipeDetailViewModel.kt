@@ -14,7 +14,7 @@ class RecipeDetailViewModel: ViewModel() {
         lateinit var id: String
     }
 
-    init {
+    fun getRecipeDetails() {
         viewModelScope.launch {
             kotlin.runCatching {
                 RecipeRepository.getRecipesById(id)

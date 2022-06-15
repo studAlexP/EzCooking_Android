@@ -11,7 +11,7 @@ class ScaleViewModel : ViewModel() {
 
     val keywords = MutableStateFlow<Keyword?>(null)
 
-    init {
+    fun getKeywords() {
         viewModelScope.launch {
             kotlin.runCatching {
                 ScaleRepository.getKeywords()
