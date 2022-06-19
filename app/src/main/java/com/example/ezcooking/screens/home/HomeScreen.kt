@@ -134,8 +134,11 @@ fun HomeScreen(
 
                 }
             }
-        ) {
-            CustomCircularProgressBar(viewModel, navController)
+        ) { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding)) {
+                CustomCircularProgressBar(viewModel, navController)
+            }
+
         }
     }
 }
