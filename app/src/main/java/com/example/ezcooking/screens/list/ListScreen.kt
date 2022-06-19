@@ -3,9 +3,12 @@ package com.example.ezcooking.screens.list
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,9 +21,16 @@ import com.example.ezcooking.R
 import com.example.ezcooking.navigation.RecipeScreens
 import com.example.ezcooking.ui.theme.CartPink
 import com.example.ezcooking.ui.theme.RasberryRed
+import com.example.ezcooking.viewmodels.ShoppingListViewModel
 
 @Composable
-fun ListScreen(navController: NavController = rememberNavController()){
+fun ListScreen(
+    groceryViewModel: ShoppingListViewModel,
+    navController: NavController = rememberNavController()
+) {
+
+    val ingredients = groceryViewModel.getAllIngredients()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -86,13 +96,44 @@ fun ListScreen(navController: NavController = rememberNavController()){
             }
         }
 
-    ) {
-        ListScreenContent()
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            ListScreenContent(ingredients = ingredients, groceryViewModel = groceryViewModel)
+        }
     }
 
 }
 
 @Composable
-fun ListScreenContent() {
-
+fun ListScreenContent(
+    ingredients: List<String>,
+    groceryViewModel: ShoppingListViewModel
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.End
+    ) {
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "delete",
+            modifier = Modifier
+                .padding(10.dp)
+                .clickable(onClick = {
+                    groceryViewModel.removeIngredients(ingredients)
+                })
+        )
+    }
+    LazyColumn(
+        modifier = Modifier.width(350.dp)
+    ) {
+        items(ingredients) {
+            Text(
+                text = it,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .padding(20.dp, 5.dp, 0.dp, 0.dp)
+            )
+        }
+    }
 }
